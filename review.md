@@ -53,7 +53,8 @@ db.session.delete(mod_role)
 db.session.commit()
 
 #Querying ROWS
-Role.query.alll()   #returns all rows in a database
+Role.query.all()   #returns all rows in a database
+Role.qyery.filter_by(name='name').first()   # Return the first occurence or none
 
 #Querying SPECIFIC rows
 use filters
@@ -74,3 +75,20 @@ migrate = Migrate(app, db)
     flask db migrate -m "initial migration"
     flask upgrade() -> applies changes to the database
     flask downgrade() -> removes the last migration from the database
+
+# Not having to import the database instance and models each time in the shell
+add 
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, User=User, Role=Role)
+
+#Before using shell
+export FLASK_APP=hello.py
+
+# Adding Migration - Used to make changes and update your database efficiently
+pip install flask-migrate
+
+import in your project: from flask_migrate import Migrate
+flask db init
+flask db migrate    # Perform the migration
+flask db upgrade    # Apply the migration

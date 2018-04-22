@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, flash,request
+from flask_migrate import Migrate
 from flask_moment import Moment
 from datetime import datetime
 
@@ -22,6 +23,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 # End DB Config
+
+# migrate
+migrate = Migrate(app, db)
 
 # Time wrapper
 moment = Moment(app)
@@ -62,18 +66,51 @@ class User(db.Model):
 
 #### END Database ORM ####
 
+### Create App Context Processor  to prevent import in shell ###
+@app.shell_context_processor
+def make_shell_context():    
+    return dict(db=db, User=User, Role=Role)
 
-@app.route('/')
+### END App Context Processor ###
+
+@app.route('/', methods=['GET', 'POST'])\
+
 def index():
-    return render_template('index.html', current_time=datetime.utcnow())
+    """ Returns the Home page """
+    form = NameForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.name.data).first()
+        if user is None:
+            user = User(username=form.name.data)
+            db.session.add(user)
+            db.session.commit()
+            session['known'] = False
+        else:
+            session['known'] = True
+        form.name.data = ''
+        return redirect(url_for('index'))
+    return render_template('index.html', form=form, name=session.get('name'), known=session.get('known', False), current_time=datetime.utcnow())
+
+    # return render_template('index.html', current_time=datetime.utcnow())
 
 # User Form
 @app.route('/user', methods=['GET', 'POST'])
 def user():
+    """ Returns the User page """
     form = NameForm()
-    if form.validate_on_submit():
-        session['name'] = form.name.data
-        return redirect(url_for('index'))
+    # flash("")
+    if request.method == 'POST': 
+        if form.validate_on_submit():
+            user = User.query.filter_by(username=form.name.data).first()
+            if user is None:
+                user = User(username=form.name.data)
+                db.session.add(user)
+                db.session.commit()
+            session['name'] = form.name.data
+            return redirect(url_for('index'))
+        else:
+            flash ("Please Enter a name")
+            flash ("Please Enter a book")
     return render_template('user.html', form=form, name=session.get('name'))
 
 
