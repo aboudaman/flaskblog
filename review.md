@@ -125,3 +125,9 @@ by: pip install -r requirements.txt
 
 # Unit Tests
 
+
+# Protecting Routes
+Routes are protected via login_required decorator: @login_required
+
+# Form login
+remember me? how to implement?

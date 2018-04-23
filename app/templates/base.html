@@ -13,7 +13,12 @@
     <title>Document</title>
 </head>
 <body>
-        <!-- <button type="button" class="btn btn-primary">Primary</button> -->
+    {% if current_user.is_authenticated %}
+        <button type="button" class="btn btn-primary">logged IN</button>
+    {% else %}
+        <button type="button" class="btn btn-primary">logged Out</button>
+    {% endif %}
+    
         {% block scripts %}
 
         {{moment.include_moment()}}
