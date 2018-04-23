@@ -5,10 +5,18 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from config import config
 
+# Add flask login
+from flask_login import LoginManager
+
 # bootstrap = Bootstrap()
 # mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+
+# Create login instance
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -20,8 +28,15 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
 
+    # initialize loin
+     login_manager.init_app(app)
+
     # attach routes and custom error pages here
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    # import authentication bluebprint
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     return app
