@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3> Register </h3>
+
+<form action="{{url_for('auth.register')}}" method="POST">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter Username" required>
+            </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+                <label for="exampleInputPassword1">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+
+
+</form>
+
+{% endblock %}
