@@ -92,3 +92,36 @@ import in your project: from flask_migrate import Migrate
 flask db init
 flask db migrate    # Perform the migration
 flask db upgrade    # Apply the migration
+
+#### Organizing the Folders ####
+|- Project
+    |- app/
+        |- templates/
+        |- static/
+        |- main/
+            |-__init__.py
+            |- errors.py
+            |- forms.py
+            |- views.py
+        |- __init__.py
+        |- email.py
+        |- models.py
+    |- migrations
+    |- tests/
+        |- __init__.py
+        |- test*.py
+    |- venv/
+    |- requirements.txt
+    |- config.py
+    |- flasky.py
+
+# REQUIREMENTS FILE
+It is good practice to include a requirements.txt file.  This records all the package dependencies with exact version 
+numbers.  This is important in case the virtual environment needs to be regenerated on a different machine.
+This file can be generated automatically by pip: pip freeze > requirements.txt
+
+When you need to build a perfect replica of the virtual environment.  You can create a new virtual environment
+by: pip install -r requirements.txt
+
+# Unit Tests
+
